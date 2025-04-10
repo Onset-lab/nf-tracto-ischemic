@@ -54,7 +54,7 @@ workflow {
 
     ch_reference_preop = BETCROP_ANTSBET.out.t1
         .combine(PIPELINE_INITIALISATION.out.atlas_reference)
-        join(BETCROP_ANTSBET.out.mask)
+        .join(BETCROP_ANTSBET.out.mask)
     REGISTRATION_REFERENCE_ON_PREOP(ch_reference_preop)
 
     ch_registered_tractogram = PIPELINE_INITIALISATION.out.t1_preop

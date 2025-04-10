@@ -1,0 +1,51 @@
+\033[0;33m USAGE \033[0m
+
+nextflow run main.nf [OPTIONAL_ARGUMENTS] (--input --bundle_atlas)
+
+\033[0;33m Example: \033[0m
+
+nextflow pull nf-tracto-ischemic
+nextflow run nf-tracto-ischemic --input input --bundle_atlas ./atlas --atlas_reference mni_masked.nii.gz -with-profile docker
+
+\033[0;33m DESCRIPTION \033[0m
+
+This pipeline is designed to perform the registration of the post-operative T1-weighted (T1w) image onto the pre-operative T1w image.
+Additionally, it registers the bundle atlas onto the pre-operative T1w image.
+Optionally, the pipeline can also register a mask from the post-operative T1w image space onto the pre-operative T1w image.
+
+    --input=/path/to/[root]                     Root folder containing multiple subjects
+
+                                                [root]
+                                                ├── S1
+                                                │   ├── *t1_preop.nii.gz
+                                                │   ├── *t1_postop.nii.gz
+                                                │   └── *mask.nii.gz (optionnal)
+                                                └── S2
+                                                    ├── *t1_preop.nii.gz
+                                                    ├── *t1_postop.nii.gz
+                                                    └── *mask.nii.gz (optionnal)
+
+    --bundle_atlas=/path/to/bundle_atlas        Path to the bundle atlas folder (containing the .trk files).
+                                                The bundle atlas folder should contain the following files:
+                                                [bundle_atlas]
+                                                ├── *bundle1.trk
+                                                ├── *bundle2.trk
+                                                └── *bundle3.trk
+
+    --atlas_reference=/path/to/atlas_reference  Path to the atlas reference image (e.g. mni space).
+                                                The atlas reference image should be in the same space as the bundle atlas.
+
+\033[0;33m OPTIONAL ARGUMENTS (current value) \033[0m
+
+--output_dir                                Directory where to write the final results.
+                                            By default, will be in ($output_dir)
+
+\033[0;33m AVAILABLE PROFILES (using -profile option (e.g. -profile docker)) \033[0m
+
+docker                                      When this profile is used, the pipeline will use the Docker containers.
+
+apptainer                                   When this profile is used, the pipeline will use the Apptainer containers.
+
+singularity                                 When this profile is used, the pipeline will use the Singularity containers.
+
+slurm                                       When this profile is used, the pipeline will use the Slurm executor.

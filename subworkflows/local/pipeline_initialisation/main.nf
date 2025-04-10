@@ -43,11 +43,12 @@ workflow PIPELINE_INITIALISATION {
 
     main:
 
-    if (!input || !bundle_atlas || !atlas_reference) {
+    if (!input || !bundle_atlas || !atlas_reference || !t1_template) {
         log.error"""Missing required parameters:
         - input: ${input}
         - bundle_atlas: ${bundle_atlas}
         - atlas_reference: ${atlas_reference}
+        - t1_template: ${t1_template}
         """
         exit 1
     }

@@ -61,7 +61,7 @@ workflow {
         .join(REGISTRATION_REFERENCE_ON_PREOP.out.affine)
         .merge(PIPELINE_INITIALISATION.out.bundle_atlas.collect().map{[it]})
         .map{ it + [[]] }
-        .join(REGISTRATION_REFERENCE_ON_PREOP.out.inverse_warp).view()
+        .join(REGISTRATION_REFERENCE_ON_PREOP.out.inverse_warp)
     REGISTRATION_TRACTOGRAM (
         ch_registered_tractogram
     )

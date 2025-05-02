@@ -47,13 +47,13 @@ workflow {
     REGISTRATION_POSTOP_ON_PREOP(ch_postop_preop)
 
     ch_bet = PIPELINE_INITIALISATION.out.t1_preop
-        .merge(PIPELINE_INITIALISATION.out.t1_template)
-        .merge(PIPELINE_INITIALISATION.out.t1_probability_map)
+        .merge(PIPELINE_INITIALISATION.out.t1_template.first())
+        .merge(PIPELINE_INITIALISATION.out.t1_probability_map.first())
         .map{ it + [[], []] }
     BETCROP_ANTSBET(ch_bet)
 
     ch_reference_preop = BETCROP_ANTSBET.out.t1
-        .combine(PIPELINE_INITIALISATION.out.atlas_reference)
+        .combine(PIPELINE_INITIALISATION.out.atlas_reference.first())
         .join(BETCROP_ANTSBET.out.mask)
     REGISTRATION_REFERENCE_ON_PREOP(ch_reference_preop)
 

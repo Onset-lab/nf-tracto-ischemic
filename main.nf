@@ -7,6 +7,7 @@ include { REGISTRATION_ANTS as REGISTRATION_POSTOP_ON_PREOP } from './modules/nf
 include { REGISTRATION_ANTS as REGISTRATION_REFERENCE_ON_PREOP } from './modules/nf-neuro/registration/ants/main'
 include { REGISTRATION_TRACTOGRAM } from './modules/nf-neuro/registration/tractogram/main'
 include { BETCROP_ANTSBET } from './modules/nf-neuro/betcrop/antsbet/main'
+include { REGISTRATION_SYNTHREGISTRATION } from './modules/nf-neuro/local/synthregistration/main.nf'
 
 if(params.help) {
     usage = file("$baseDir/USAGE")
@@ -45,6 +46,10 @@ workflow {
         .join(PIPELINE_INITIALISATION.out.t1_postop)
         .map{ it + [[]] }
     REGISTRATION_POSTOP_ON_PREOP(ch_postop_preop)
+
+    ch_postop_preop_synth = PIPELINE_INITIALISATION.out.t1_postop
+        .join(PIPELINE_INITIALISATION.out.t1_preop)
+    REGISTRATION_SYNTHREGISTRATION(ch_postop_preop_synth)
 
     ch_bet = PIPELINE_INITIALISATION.out.t1_preop
         .merge(PIPELINE_INITIALISATION.out.t1_template.first())

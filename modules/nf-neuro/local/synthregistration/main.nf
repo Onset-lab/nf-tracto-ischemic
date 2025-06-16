@@ -28,7 +28,7 @@ process REGISTRATION_SYNTHREGISTRATION {
     def steps = task.ext.steps ? "-n " + task.ext.steps : "-n 7"
     def extent = task.ext.extent ? "-e " + task.ext.extent : "-e 256"
     def weight = task.ext.weight ? "-w " + task.ext.weight : ""
-    def transform = task.ext.transform_type == "joint" ? "deform_warp.nii.gz" : "affine.lta"
+    def transform = transform_type == "joint" ? "deform_warp.nii.gz" : "affine.lta"
     """
     export ITK_GLOBAL_DEFAULT_NUMBER_OF_THREADS=1
     export OMP_NUM_THREADS=1

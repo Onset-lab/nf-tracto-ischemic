@@ -4,7 +4,7 @@ process REGISTRATION_SYNTHREGISTRATION {
 
     container "freesurfer/synthmorph:4"
     containerOptions {
-        (workflow.containerEngine == 'docker' && task.ext.gpu) ? '--entrypoint "" --gpus all' : ""
+        (workflow.containerEngine == 'docker' && task.ext.gpu) ? '--entrypoint "" --user \$(id -u):\$(id -g) --gpus all' : ""
     }
 
     input:

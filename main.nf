@@ -47,10 +47,6 @@ workflow {
         .map{ it + [[]] }
     REGISTRATION_POSTOP_ON_PREOP(ch_postop_preop)
 
-    ch_postop_preop_synth = PIPELINE_INITIALISATION.out.t1_postop
-        .join(PIPELINE_INITIALISATION.out.t1_preop)
-    REGISTRATION_SYNTHREGISTRATION(ch_postop_preop_synth)
-
     ch_bet = PIPELINE_INITIALISATION.out.t1_preop
         .merge(PIPELINE_INITIALISATION.out.t1_template.first())
         .merge(PIPELINE_INITIALISATION.out.t1_probability_map.first())

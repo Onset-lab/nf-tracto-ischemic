@@ -19,6 +19,13 @@
                             "modules"
                         ]
                     },
+                    "registration/antsapplytransforms": {
+                        "branch": "main",
+                        "git_sha": "2b45c6a74dc9b5b793d7e40c6a715f4c07064864",
+                        "installed_by": [
+                            "modules"
+                        ]
+                    },
                     "registration/tractogram": {
                         "branch": "main",
                         "git_sha": "072538948dd406f6a88cdcf456dc3b132b66e5b6",

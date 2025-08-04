@@ -7,7 +7,8 @@ include { REGISTRATION_ANTS as REGISTRATION_POSTOP_ON_PREOP } from './modules/nf
 include { REGISTRATION_ANTS as REGISTRATION_REFERENCE_ON_PREOP } from './modules/nf-neuro/registration/ants/main'
 include { REGISTRATION_TRACTOGRAM } from './modules/nf-neuro/registration/tractogram/main'
 include { BETCROP_ANTSBET } from './modules/nf-neuro/betcrop/antsbet/main'
-include { REGISTRATION_SYNTHREGISTRATION } from './modules/nf-neuro/local/synthregistration/main.nf'
+include { REGISTRATION_ANTSAPPLYTRANSFORMS } from './modules/nf-neuro/registration/antsapplytransforms/main'
+include { STREAMLINES_IN_MASK } from './modules/local/streamlines_in_mask/main.nf'
 
 if(params.help) {
     usage = file("$baseDir/USAGE")
@@ -66,4 +67,18 @@ workflow {
     REGISTRATION_TRACTOGRAM (
         ch_registered_tractogram
     )
+
+    ch_ants_apply_transforms = PIPELINE_INITIALISATION.out.avc
+        .mix(PIPELINE_INITIALISATION.out.cavite)
+        .groupTuple()
+        .join(PIPELINE_INITIALISATION.out.t1_preop)
+        .join(REGISTRATION_REFERENCE_ON_PREOP.out.warp)
+        .join(REGISTRATION_REFERENCE_ON_PREOP.out.affine)
+    REGISTRATION_ANTSAPPLYTRANSFORMS(ch_ants_apply_transforms)
+
+    ch_streamlines_in_mask = REGISTRATION_ANTSAPPLYTRANSFORMS.out.image_warp
+        .filter { it[1].name.contains('avc') }
+        .map { [it[0], it[1]] }
+        .join(REGISTRATION_TRACTOGRAM.out.warped_tractogram)
+    STREAMLINES_IN_MASK(ch_streamlines_in_mask)
 }

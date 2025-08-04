@@ -67,7 +67,23 @@ workflow PIPELINE_INITIALISATION {
                             fmeta.id =  ch1.parent.name
                             [fmeta, ch1]
                         }
-    mask_channel = Channel.fromPath("$input/**/*mask.nii.gz")
+    avc_channel = Channel.fromPath("$input/**/avc.nii.gz")
+                    .map{ch1 ->
+                        def fmeta = [:]
+                        // Set meta.id
+                        fmeta.id =  ch1.parent.name
+                        [fmeta, ch1]
+                    }
+    
+    cavite_channel = Channel.fromPath("$input/**/cavite.nii.gz")
+                    .map{ch1 ->
+                        def fmeta = [:]
+                        // Set meta.id
+                        fmeta.id =  ch1.parent.name
+                        [fmeta, ch1]
+                    }
+
+    brainnetome_channel = Channel.fromPath("$input/**/brainnetome.nii.gz")
                     .map{ch1 ->
                         def fmeta = [:]
                         // Set meta.id
@@ -89,7 +105,9 @@ workflow PIPELINE_INITIALISATION {
     emit:
     t1_preop = t1_preop_channel        // channel: [ val(meta), [ image ] ]
     t1_postop = t1_postop_channel        // channel: [ val(meta), [ image ] ]
-    mask = mask_channel                // channel: [ val(meta), [ image ] ]
+    avc = avc_channel                // channel: [ val(meta), [ image ] ]
+    cavite = cavite_channel            // channel: [ val(meta), [ image ] ]
+    brainnetome = brainnetome_channel    // channel: [ val(meta), [ image
     bundle_atlas = bundle_atlas_channel        // channel: [ paths ]
     atlas_reference = atlas_reference_channel  // channel: [ path ]
     t1_template = t1_template_channel        // channel: [ path ]

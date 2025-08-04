@@ -32,9 +32,10 @@ process STREAMLINES_IN_MASK {
         nb_tot_streamlines=\$(./jq '.streamline_count_before_filtering' tmp.json)
         nb_filtered_streamlines=\$(./jq '.streamline_count_final_filtering' tmp.json)
         perc_in_avc=\$(echo "scale=4; \$nb_filtered_streamlines / \$nb_tot_streamlines" | bc)
+        bundle=\$(echo "\$bname" | sed 's/^.*__//')
 
         ./jq -n \
-            --arg sid "${prefix}" \
+            --arg sid \${bundle} \
             --arg nb_tot_streamlines "\$nb_tot_streamlines" \
             --arg nb_filtered_streamlines "\$nb_filtered_streamlines" \
             --arg perc_in_avc "\$perc_in_avc" \

@@ -19,6 +19,9 @@ process STREAMLINES_IN_MASK {
     script:
     def prefix = task.ext.prefix ?: "${meta.id}"
     """
+    wget -O jq https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64
+    chmod +x ./jq
+    cp jq /usr/bin
     for bundle in ${bundles};
         do \
         ext=\${bundle#*.}

@@ -27,9 +27,9 @@ process STREAMLINES_IN_MASK {
         scil_tractogram_filter_by_roi.py "\${bundle}" tmp.trk \
             --drawn_roi "${mask}" any include -f --display_counts > tmp.json
 
-        nb_tot_streamlines=$(jq '.streamline_count_before_filtering' tmp.json)
-        nb_filtered_streamlines=$(jq '.streamline_count_final_filtering' tmp.json)
-        perc_in_avc=$(echo "scale=4; \$nb_filtered_streamlines / \$nb_tot_streamlines" | bc)
+        nb_tot_streamlines=\$(jq '.streamline_count_before_filtering' tmp.json)
+        nb_filtered_streamlines=\$(jq '.streamline_count_final_filtering' tmp.json)
+        perc_in_avc=\$(echo "scale=4; \$nb_filtered_streamlines / \$nb_tot_streamlines" | bc)
 
         jq -n \
             --arg sid "${prefix}" \

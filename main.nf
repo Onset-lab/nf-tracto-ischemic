@@ -78,6 +78,6 @@ workflow {
 
     ch_streamlines_in_mask = REGISTRATION_ANTSAPPLYTRANSFORMS.out.warped_image
         .map { [it[0], it[1][0]] }
-        .join(REGISTRATION_TRACTOGRAM.out.warped_tractogram)
+        .join(REGISTRATION_TRACTOGRAM.out.warped_tractogram).view()
     STREAMLINES_IN_MASK(ch_streamlines_in_mask)
 }

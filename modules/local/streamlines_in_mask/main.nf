@@ -10,7 +10,7 @@ process STREAMLINES_IN_MASK {
     tuple val(meta), path(mask), path(bundles)
 
     output:
-    tuple val(meta), path("*__bundles_in_avc"), emit: bundles_in_avc
+    tuple val(meta), path("*__bundles_in_avc.json"), emit: bundles_in_avc
     path "versions.yml"           , emit: versions
 
     when:

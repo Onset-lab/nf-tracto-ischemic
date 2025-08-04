@@ -78,7 +78,7 @@ workflow {
 
     ch_streamlines_in_mask = REGISTRATION_ANTSAPPLYTRANSFORMS.out.warped_image.view()
         .filter { it[1].name.contains('avc') }.view()
-        .map { [it[0], it[1]] }.view
+        .map { [it[0], it[1]] }.view()
         .join(REGISTRATION_TRACTOGRAM.out.warped_tractogram).view()
     STREAMLINES_IN_MASK(ch_streamlines_in_mask)
 }

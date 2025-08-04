@@ -38,7 +38,8 @@ process STREAMLINES_IN_MASK {
             --arg nb_tot_streamlines "\$nb_tot_streamlines" \
             --arg nb_filtered_streamlines "\$nb_filtered_streamlines" \
             --arg perc_in_avc "\$perc_in_avc" \
-            '{sid: \$sid, nb_tot_streamlines: \$nb_tot_streamlines, nb_filtered_streamlines: \$nb_filtered_streamlines, perc_in_avc: \$perc_in_avc}' > \${bname}.json
+            --arg bundle "\${bname}" \
+            '{sid: \$sid, bundle: \$bundle, nb_tot_streamlines: \$nb_tot_streamlines, nb_filtered_streamlines: \$nb_filtered_streamlines, perc_in_avc: \$perc_in_avc}' > \${bname}.json
         rm -f tmp.trk tmp.json
     done
 

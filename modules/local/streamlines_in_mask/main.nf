@@ -21,7 +21,6 @@ process STREAMLINES_IN_MASK {
     """
     wget -O jq https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64
     chmod +x ./jq
-    cp jq /usr/bin
     for bundle in ${bundles};
         do \
         ext=\${bundle#*.}
@@ -30,11 +29,11 @@ process STREAMLINES_IN_MASK {
         scil_tractogram_filter_by_roi.py "\${bundle}" tmp.trk \
             --drawn_roi "${mask}" any include -f --display_counts > tmp.json
 
-        nb_tot_streamlines=\$(jq '.streamline_count_before_filtering' tmp.json)
-        nb_filtered_streamlines=\$(jq '.streamline_count_final_filtering' tmp.json)
+        nb_tot_streamlines=\$(./jq '.streamline_count_before_filtering' tmp.json)
+        nb_filtered_streamlines=\$(./jq '.streamline_count_final_filtering' tmp.json)
         perc_in_avc=\$(echo "scale=4; \$nb_filtered_streamlines / \$nb_tot_streamlines" | bc)
 
-        jq -n \
+        ./jq -n \
             --arg sid "${prefix}" \
             --arg nb_tot_streamlines "\$nb_tot_streamlines" \
             --arg nb_filtered_streamlines "\$nb_filtered_streamlines" \
@@ -43,7 +42,7 @@ process STREAMLINES_IN_MASK {
         rm -f tmp.trk tmp.json
     done
 
-    jq -s '.' *.json > ${prefix}__bundles_in_avc.json
+    ./jq -s '.' *.json > ${prefix}__bundles_in_avc.json
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

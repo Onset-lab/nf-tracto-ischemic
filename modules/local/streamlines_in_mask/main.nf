@@ -35,11 +35,11 @@ process STREAMLINES_IN_MASK {
         bundle=\$(echo "\$bname" | sed 's/^.*__//')
 
         ./jq -n \
-            --arg sid \${bundle} \
+            --arg sid \${prefix} \
             --arg nb_tot_streamlines "\$nb_tot_streamlines" \
             --arg nb_filtered_streamlines "\$nb_filtered_streamlines" \
             --arg perc_in_avc "\$perc_in_avc" \
-            --arg bundle "\${bname}" \
+            --arg bundle "\${bundle}" \
             '{sid: \$sid, bundle: \$bundle, nb_tot_streamlines: \$nb_tot_streamlines, nb_filtered_streamlines: \$nb_filtered_streamlines, perc_in_avc: \$perc_in_avc}' > \${bname}.json
         rm -f tmp.trk tmp.json
     done

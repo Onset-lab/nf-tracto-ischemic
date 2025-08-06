@@ -77,7 +77,7 @@ workflow {
     REGISTRATION_ANTSAPPLYTRANSFORMS(ch_ants_apply_transforms)
 
     ch_streamlines_in_mask = REGISTRATION_ANTSAPPLYTRANSFORMS.out.warped_image
-        .map { it[1].size() > 1 ? [it[0], it[1][0]] : [] }.view()
+        .map { it[1] instanceof List && it[1].size() > 1 ? [it[0], it[1][0]] : [] }.view()
         .join(REGISTRATION_TRACTOGRAM.out.warped_tractogram)
     STREAMLINES_IN_MASK(ch_streamlines_in_mask)
 }

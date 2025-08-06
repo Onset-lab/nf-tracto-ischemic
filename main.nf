@@ -72,7 +72,7 @@ workflow {
     ch_move_to_postop = PIPELINE_INITIALISATION.out.avc
         .mix(PIPELINE_INITIALISATION.out.cavite)
         .groupTuple()
-        .join(PIPELINE_INITIALISATION.out.t1_preop)
+        .join(PIPELINE_INITIALISATION.out.t1_postop)
     MOVE_TO_POSTOP(ch_move_to_postop)
 
     ch_ants_apply_transforms = MOVE_TO_POSTOP.out.warped_image

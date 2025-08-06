@@ -35,7 +35,7 @@ process STREAMLINES_IN_MASK {
         bundle=\$(echo "\$bname" | sed 's/^.*__//')
 
         ./jq -n \
-            --arg sid \${prefix} \
+            --arg sid ${prefix} \
             --arg nb_tot_streamlines "\$nb_tot_streamlines" \
             --arg nb_filtered_streamlines "\$nb_filtered_streamlines" \
             --arg perc_in_avc "\$perc_in_avc" \

@@ -77,8 +77,8 @@ workflow {
 
     ch_ants_apply_transforms = MOVE_TO_POSTOP.out.warped_image
         .join(PIPELINE_INITIALISATION.out.t1_preop)
-        .join(REGISTRATION_REFERENCE_ON_PREOP.out.warp)
-        .join(REGISTRATION_REFERENCE_ON_PREOP.out.affine).view()
+        .join(REGISTRATION_POSTOP_ON_PREOP.out.warp)
+        .join(REGISTRATION_POSTOP_ON_PREOP.out.affine).view()
     REGISTRATION_ANTSAPPLYTRANSFORMS(ch_ants_apply_transforms)
 
     ch_streamlines_in_mask = REGISTRATION_ANTSAPPLYTRANSFORMS.out.warped_image

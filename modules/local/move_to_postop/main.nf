@@ -43,6 +43,7 @@ process MOVE_TO_POSTOP {
                             $output_dtype\
                             $image_type\
                             $default_val
+    done
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

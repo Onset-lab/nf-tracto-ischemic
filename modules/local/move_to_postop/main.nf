@@ -9,7 +9,7 @@ process MOVE_TO_POSTOP {
     tuple val(meta), path(image), path(reference)
 
     output:
-    tuple val(meta), path("*__postop.nii.gz")                           , emit: warped_image
+    tuple val(meta), path("*_postop.nii.gz")                           , emit: warped_image
     path "versions.yml"                                                 , emit: versions
 
     when:
@@ -17,7 +17,6 @@ process MOVE_TO_POSTOP {
 
     script:
     def prefix = task.ext.prefix ?: "${meta.id}"
-    def suffix = task.ext.first_suffix ? "${task.ext.first_suffix}__warped" : "__warped"
 
     def output_dtype = task.ext.output_dtype ? "-u " + task.ext.output_dtype : ""
     def dimensionality = task.ext.dimensionality ? "-d " + task.ext.dimensionality : "-d 3"
@@ -38,7 +37,7 @@ process MOVE_TO_POSTOP {
         antsApplyTransforms $dimensionality\
                             -i \$image\
                             -r $reference\
-                            -o ${prefix}__\${bname}${suffix}.nii.gz\
+                            -o ${prefix}__\${bname}_postop.nii.gz\
                             $interpolation\
                             $output_dtype\
                             $image_type\

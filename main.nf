@@ -9,6 +9,7 @@ include { REGISTRATION_TRACTOGRAM } from './modules/nf-neuro/registration/tracto
 include { BETCROP_ANTSBET } from './modules/nf-neuro/betcrop/antsbet/main'
 include { REGISTRATION_ANTSAPPLYTRANSFORMS } from './modules/nf-neuro/registration/antsapplytransforms/main'
 include { STREAMLINES_IN_MASK } from './modules/local/streamlines_in_mask/main.nf'
+include { MOVE_TO_POSTOP } from './modules/local/move_to_postop/main.nf'
 
 if(params.help) {
     usage = file("$baseDir/USAGE")
@@ -68,9 +69,13 @@ workflow {
         ch_registered_tractogram
     )
 
-    ch_ants_apply_transforms = PIPELINE_INITIALISATION.out.avc
+    ch_move_to_postop = PIPELINE_INITIALISATION.out.avc
         .mix(PIPELINE_INITIALISATION.out.cavite)
         .groupTuple()
+        .join(PIPELINE_INITIALISATION.out.t1_preop)
+    MOVE_TO_POSTOP(ch_move_to_postop)
+
+    ch_ants_apply_transforms = MOVE_TO_POSTOP.out.warped_image
         .join(PIPELINE_INITIALISATION.out.t1_preop)
         .join(REGISTRATION_REFERENCE_ON_PREOP.out.warp)
         .join(REGISTRATION_REFERENCE_ON_PREOP.out.affine)

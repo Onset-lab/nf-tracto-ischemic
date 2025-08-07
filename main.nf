@@ -8,8 +8,10 @@ include { REGISTRATION_ANTS as REGISTRATION_REFERENCE_ON_PREOP } from './modules
 include { REGISTRATION_TRACTOGRAM } from './modules/nf-neuro/registration/tractogram/main'
 include { BETCROP_ANTSBET } from './modules/nf-neuro/betcrop/antsbet/main'
 include { REGISTRATION_ANTSAPPLYTRANSFORMS } from './modules/nf-neuro/registration/antsapplytransforms/main'
+include { REGISTRATION_ANTSAPPLYTRANSFORMS as REGISTRATION_BRAINNETOME } from './modules/nf-neuro/registration/antsapplytransforms/main'
 include { STREAMLINES_IN_MASK } from './modules/local/streamlines_in_mask/main.nf'
 include { MOVE_TO_POSTOP } from './modules/local/move_to_postop/main.nf'
+include { LABELS_IN_CAVITY } from './modules/local/labels_in_cavity/main.nf'
 
 if(params.help) {
     usage = file("$baseDir/USAGE")
@@ -41,6 +43,7 @@ workflow {
         params.bundle_atlas,
         params.atlas_reference,
         params.t1_template,
+        params.brainnetome,
         params.output_dir
     )
 
@@ -85,4 +88,16 @@ workflow {
         .map { it[1] instanceof List && it[1].size() > 1 ? [it[0], it[1][0]] : [] }
         .join(REGISTRATION_TRACTOGRAM.out.warped_tractogram)
     STREAMLINES_IN_MASK(ch_streamlines_in_mask)
+
+    ch_brainnetome = PIPELINE_INITIALISATION.out.brainnetome
+        .join(PIPELINE_INITIALISATION.out.t1_preop)
+        .join(REGISTRATION_REFERENCE_ON_PREOP.out.warp)
+        .join(REGISTRATION_REFERENCE_ON_PREOP.out.affine)
+    REGISTRATION_BRAINNETOME(ch_brainnetome)
+
+    ch_labels_in_cavity = REGISTRATION_ANTSAPPLYTRANSFORMS.out.warped_image
+        .map { it[1] instanceof List && it[1].size() > 1 ? [it[0], it[1][1]] : it }
+        .join(REGISTRATION_BRAINNETOME.out.warped_image)
+
+    LABELS_IN_CAVITY(ch_labels_in_cavity)
 }

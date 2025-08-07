@@ -90,7 +90,8 @@ workflow {
     STREAMLINES_IN_MASK(ch_streamlines_in_mask)
 
     ch_brainnetome = PIPELINE_INITIALISATION.out.brainnetome
-        .join(PIPELINE_INITIALISATION.out.t1_preop)
+        .concat(PIPELINE_INITIALISATION.out.t1_preop)
+        .map { [it[1], it[0], it[2]] }.view()
         .join(REGISTRATION_REFERENCE_ON_PREOP.out.warp)
         .join(REGISTRATION_REFERENCE_ON_PREOP.out.affine)
     REGISTRATION_BRAINNETOME(ch_brainnetome)

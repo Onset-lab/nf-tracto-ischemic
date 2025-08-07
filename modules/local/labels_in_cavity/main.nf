@@ -9,7 +9,7 @@ process LABELS_IN_CAVITY {
     tuple val(meta), path(mask), path(labels)
 
     output:
-    tuple val(meta), path("*___labels_in_cavity.txt"), emit: labels_in_cavity
+    tuple val(meta), path("*__labels_in_cavity.txt"), emit: labels_in_cavity
     path "versions.yml"           , emit: versions
 
     when:

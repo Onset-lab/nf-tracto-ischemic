@@ -89,10 +89,9 @@ workflow {
         .join(REGISTRATION_TRACTOGRAM.out.warped_tractogram)
     STREAMLINES_IN_MASK(ch_streamlines_in_mask)
 
-    ch_brainnetome = PIPELINE_INITIALISATION.out.brainnetome
-        .concat(PIPELINE_INITIALISATION.out.t1_preop)
-        .flatten()
-        .map { [it[1], it[0], it[2]] }.view()
+    ch_brainnetome = PIPELINE_INITIALISATION.out.t1_preop
+        .combine(PIPELINE_INITIALISATION.out.brainnetome)
+        .map { [it[0], it[2], it[1]] }.view()
         .join(REGISTRATION_REFERENCE_ON_PREOP.out.warp)
         .join(REGISTRATION_REFERENCE_ON_PREOP.out.affine)
     REGISTRATION_BRAINNETOME(ch_brainnetome)

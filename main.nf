@@ -91,6 +91,7 @@ workflow {
 
     ch_brainnetome = PIPELINE_INITIALISATION.out.brainnetome
         .concat(PIPELINE_INITIALISATION.out.t1_preop)
+        .flatten()
         .map { [it[1], it[0], it[2]] }.view()
         .join(REGISTRATION_REFERENCE_ON_PREOP.out.warp)
         .join(REGISTRATION_REFERENCE_ON_PREOP.out.affine)

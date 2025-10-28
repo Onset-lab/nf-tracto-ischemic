@@ -83,12 +83,19 @@ workflow PIPELINE_INITIALISATION {
                         fmeta.id =  ch1.parent.name
                         [fmeta, ch1]
                     }
+    
+    brainnetome_channel = Channel.fromPath("$input/**/brainnetome.nii.gz")
+                    .map{ch1 ->
+                        def fmeta = [:]
+                        // Set meta.id
+                        fmeta.id =  ch1.parent.name
+                        [fmeta, ch1]
+                    }
 
     atlas_reference_channel = Channel.fromPath("$atlas_reference")
     bundle_atlas_channel = Channel.fromPath("$bundle_atlas/*.trk")
     t1_template_channel = Channel.fromPath("$t1_template/t1_template.nii.gz")
     t1_probability_map_channel = Channel.fromPath("$t1_template/t1_brain_probability_map.nii.gz")
-    brainnetome_channel = Channel.fromPath("$brainnetome")
 
     log.info "\033[0;33m Parameters \033[0m"
     log.info " Input: ${input}"

@@ -43,7 +43,6 @@ workflow {
         params.bundle_atlas,
         params.atlas_reference,
         params.t1_template,
-        params.brainnetome,
         params.output_dir
     )
 
@@ -89,16 +88,9 @@ workflow {
         .join(REGISTRATION_TRACTOGRAM.out.warped_tractogram)
     STREAMLINES_IN_MASK(ch_streamlines_in_mask)
 
-    ch_brainnetome = PIPELINE_INITIALISATION.out.t1_preop
-        .combine(PIPELINE_INITIALISATION.out.brainnetome)
-        .map { [it[0], it[2], it[1]] }
-        .join(REGISTRATION_REFERENCE_ON_PREOP.out.warp)
-        .join(REGISTRATION_REFERENCE_ON_PREOP.out.affine)
-    REGISTRATION_BRAINNETOME(ch_brainnetome)
-
     ch_labels_in_cavity = REGISTRATION_ANTSAPPLYTRANSFORMS.out.warped_image
         .map { it[1] instanceof List && it[1].size() > 1 ? [it[0], it[1][1]] : it }
-        .join(REGISTRATION_BRAINNETOME.out.warped_image)
+        .join(PIPELINE_INITIALISATION.out.brainnetome)
 
     LABELS_IN_CAVITY(ch_labels_in_cavity)
 }

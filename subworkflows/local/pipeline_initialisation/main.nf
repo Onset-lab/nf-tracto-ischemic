@@ -39,7 +39,6 @@ workflow PIPELINE_INITIALISATION {
     bundle_atlas       // path
     atlas_reference    // path
     t1_template        // path
-    brainnetome        // path
     outdir             // path
 
     main:
@@ -101,7 +100,6 @@ workflow PIPELINE_INITIALISATION {
     log.info " Input: ${input}"
     log.info " Bundle atlas: ${bundle_atlas}"
     log.info " Atlas reference: ${atlas_reference}"
-    log.info " Brainnetome: ${brainnetome}"
     log.info " Output directory: ${outdir}"
 
     emit:

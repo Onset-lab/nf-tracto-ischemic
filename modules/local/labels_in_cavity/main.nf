@@ -19,7 +19,7 @@ process LABELS_IN_CAVITY {
     def prefix = task.ext.prefix ?: "${meta.id}"
     """
     ImageMath 3 masked_labels.nii.gz m ${labels} ${mask}
-    fslstats masked_labels.nii.gz -R > ${prefix}__labels_in_cavity.txt
+    get_ids.py masked_labels.nii.gz > ${prefix}__labels_in_cavity.txt
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

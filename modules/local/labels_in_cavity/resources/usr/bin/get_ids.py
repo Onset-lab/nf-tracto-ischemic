@@ -3,39 +3,29 @@
 import argparse
 import numpy as np
 import nibabel as nib
-import sys
-
-
-def get_unique_labels(nifti_path):
-    try:
-        img = nib.load(nifti_path)
-        data = img.get_fdata()
-
-        unique_vals = np.unique(data[data != 0])
-
-        unique_vals = unique_vals.astype(int)  # if it's a label map
-
-        return unique_vals
-
-    except Exception as e:
-        sys.stderr.write(f"Error: {e}\n")
-        sys.exit(1)
 
 
 def main():
     parser = argparse.ArgumentParser(
         description="Print unique label IDs from a NIfTI label map."
     )
-    parser.add_argument(
-        "nifti_file", type=str, help="Path to the label map (NIfTI file)"
-    )
+    parser.add_argument("labels", type=str, help="Path to the label map (NIfTI file)")
+    parser.add_argument("mask", type=str, help="Path to the mask NIfTI file")
 
     args = parser.parse_args()
 
-    labels = get_unique_labels(args.nifti_file)
+    labels = nib.load(args.labels).get_fdata().astype(np.int32)
+    mask = nib.load(args.mask).get_fdata().astype(bool)
 
-    for val in labels:
-        print(val)
+    overlap = labels * mask
+    unique_labels = np.unique(overlap[overlap != 0])
+
+    for val in unique_labels:
+        volume_in_labels = np.sum(labels == val)
+        volume_in_mask = np.sum(overlap == val)
+        percentage = (volume_in_mask / volume_in_labels) * 100
+        if percentage > 50:
+            print(val)
 
 
 if __name__ == "__main__":

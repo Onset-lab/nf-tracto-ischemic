@@ -24,7 +24,7 @@ def main():
         volume_in_labels = np.sum(labels == val)
         volume_in_mask = np.sum(overlap == val)
         percentage = (volume_in_mask / volume_in_labels) * 100
-        if percentage > 50:
+        if percentage > 5:
             print(val)
 
 

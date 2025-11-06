@@ -18,6 +18,7 @@ process LABELS_IN_CAVITY {
     script:
     def prefix = task.ext.prefix ?: "${meta.id}"
     """
+    echo "2%"
     get_ids.py ${labels} ${mask} > ${prefix}__labels_in_cavity.txt
 
     cat <<-END_VERSIONS > versions.yml
